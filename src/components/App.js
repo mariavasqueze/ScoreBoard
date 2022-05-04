@@ -33,7 +33,7 @@ class App extends Component {
   // initialize id - id counter
   prevId = 4;
 
-  handleScoreChange = (index, delta) => { //parameter cna have any name
+  handleScoreChange = (index, delta) => { //parameter can have any name
     this.setState( prevState => ({
       score: prevState.players[index].score += delta
     }));
@@ -64,11 +64,23 @@ class App extends Component {
     });
   }
 
+  getHighScore = () => {
+    const scores = this.state.players.map( p => p.score );
+    const highScore = Math.max(...scores);
+    if(highScore) {
+      return highScore;
+    }
+    return null;
+  }
+
+
   render() {
+    const highScore = this.getHighScore();
+
     return (
       <div className="scoreboard">
         <Header 
-          title="Scoreboard" 
+          // title="Scoreboard" --> works because there's a defualt for title
           players={this.state.players}
         />
   
@@ -81,7 +93,8 @@ class App extends Component {
             key={player.id.toString()}
             index={index} 
             changeScore={this.handleScoreChange}
-            removePlayer={this.handleRemovePlayer}           
+            removePlayer={this.handleRemovePlayer}
+            isHighScore={highScore === player.score} // is a player's 'score' prop equal to the high score?     
           />
         )}
 
